@@ -245,8 +245,8 @@ footer{padding:30px 24px;border-top:1px solid var(--line);font-family:Arial,sans
         <div><span class="legend-swatch das"></span><strong>Das · 1882</strong></div>
         <div><span class="legend-swatch ghose"></span><strong>Ghose · 1932</strong></div>
         <div><span class="legend-line"></span> principal / onward movement</div>
-        <div><span class="legend-line dashed"></span> local, excursion, or return movement</div>
-        <div class="legend-note">Lines connect narrative nodes schematically; they do not claim an exact historical path.</div>
+        <div>Local, excursion and return episodes are shown as markers without speculative connecting lines.</div>
+        <div class="legend-note">Lines connect consecutive principal narrative nodes schematically; local, excursion and return episodes are not connected where doing so would imply an unsupported route. They indicate narrative sequence, not reconstructed tracks.</div>
       </div>
 
       <section class="timeline-shell" id="timelineShell" aria-label="Journey timeline">
@@ -323,11 +323,10 @@ wireUI();
 
 function initMap(){
   map=L.map("map",{worldCopyJump:true}).setView([35,25],3);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{
-    subdomains:"abcd",
-    maxZoom:20,
-    attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
-  }).addTo(map);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
+  maxZoom:19,
+  attribution:'&copy; OpenStreetMap contributors'
+}).addTo(map);
   map.on("tileerror", function(){
     const mapEl = document.getElementById("map");
     mapEl.dataset.tileError = "true";
@@ -372,9 +371,12 @@ function render(){
     const items=data.filter(d=>d.route===route).sort((a,b)=>a.order-b.order);
     for(let i=1;i<items.length;i++){
       const a=items[i-1], b=items[i];
-      const style={...routeStyles[route]};
-      if(routeType(a)!=="principal" || routeType(b)!=="principal") style.dashArray="7 6";
-      L.polyline([[a.lat,a.lon],[b.lat,b.lon]],style).addTo(routeLayer);
+      if(routeType(a)!=="principal" || routeType(b)!=="principal") continue;
+      L.polyline([[a.lat,a.lon],[b.lat,b.lon]],{
+        ...routeStyles[route],
+        opacity:0.58,
+        weight:2.5
+      }).addTo(routeLayer);
     }
   });
 

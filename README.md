@@ -31,7 +31,7 @@ Full bibliographic references are provided in the accompanying thesis.
 
 ## Technical framework
 
-Built as a static web project using Leaflet for interactive mapping and CARTO/OpenStreetMap basemap data.
+Built as a static web project using Leaflet for interactive mapping and OpenStreetMap basemap data.
 
 ## Status
 
